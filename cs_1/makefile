@@ -6,4 +6,4 @@ output:
 	$(CC) $(MAKE_EXE) cs_1.c
 
 clean:
-rm *.o
+	rm *.o
