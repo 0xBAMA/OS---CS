@@ -50,6 +50,9 @@ int main()
 
 		//fork
 		if(!fork()){ //here we enter the child function
+
+			//we're going to look at this tomorrow
+
 			//handle the message
 			//open fifos for the particular process
 			//handle further messages
