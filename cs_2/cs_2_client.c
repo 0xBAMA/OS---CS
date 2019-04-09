@@ -27,5 +27,10 @@ typedef struct msg {
 
 int main()
 {
+	int client_PID = getpid();
+
+	printf("This is an instance of the CS_2 client process, started with PID %d\n", client_PID);
+
+
 	return 0;
 }

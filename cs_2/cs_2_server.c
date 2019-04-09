@@ -27,9 +27,9 @@ typedef struct msg {
 
 int main()
 {
-	int sever_PID = getpid();
+	int server_PID = getpid();
 
-	printf("CS_2 server started with PID %d", server_PID);
+	printf("This is the CS_2 server process, started with PID %d\n", server_PID);
 
 
 
