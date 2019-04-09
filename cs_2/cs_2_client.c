@@ -1,6 +1,11 @@
 #include <stdio.h>
+#include <signal.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 
 #define MSG_LENGTH 100 //maximum length of message
@@ -30,6 +35,8 @@ int main()
 	int client_PID = getpid();
 
 	printf("This is an instance of the CS_2 client process, started with PID %d\n", client_PID);
+
+
 
 
 	return 0;
