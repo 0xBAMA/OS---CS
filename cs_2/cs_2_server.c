@@ -14,7 +14,8 @@ int current_client_count;
 //function to decrement child count
 void decrement_clients(int sig){
 	current_client_count--;
-	signal(SIGCHLD, decrement_clients); //set up the handler again so it will catch the next one
+	printf("a great tragedy, a child has died - leaving %d\n", current_client_count);
+	signal(SIGCHLD, decrement_clients); //make sure the handler is registered
 }
 
 
@@ -52,15 +53,16 @@ int main()
 		//fork
 		if(!fork()){ //here we enter the child function
 
-			//we're going to look at this tomorrow
+			//child code
 
 			//handle the message
 			//open fifos for the particular process
 			//handle further messages
 			//continue till it exits
 		}else{
+			//parent code
 			current_client_count++; //increment - parent needs to retain this information
-			printf("I have given birth and now posess %d children\n", current_client_count);
+			printf("I, the server, have given birth and now posess %d children\n", current_client_count);
 		}
 	}
 
