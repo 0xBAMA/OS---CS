@@ -44,9 +44,10 @@ int main()
 
 		close(fd); //close the file descriptor, now that we have a message from a client
 
+		//make sure to follow the pattern open-read-close to avoid complications
+
 		client_PID = m.PID; //get the PID from the message
 
-		current_client_count++; //increment before the fork - parent needs to retain this information
 
 		//fork
 		if(!fork()){ //here we enter the child function
@@ -57,10 +58,13 @@ int main()
 			//open fifos for the particular process
 			//handle further messages
 			//continue till it exits
+		}else{
+			current_client_count++; //increment - parent needs to retain this information
+			printf("I have given birth and now posess %d children\n", current_client_count);
 		}
 	}
 
 
-
+	unlink(np); //get rid of the fifo
 	return 0;
 }
