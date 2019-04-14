@@ -72,7 +72,7 @@ int main(){
 
 		while(1)
 		{
-			sleep(1);//weird timing issues - prompt was outputting before the server had outputted
+			usleep(1);//weird timing issues - prompt was outputting before the server had outputted
 			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
 			fgets(chlid_message_string,MSG_LENGTH,stdin);//get the input
 			sprintf(buf,"%.4s",chlid_message_string);//grab the first four characters
