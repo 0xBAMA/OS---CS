@@ -93,6 +93,16 @@ int main(){
 
 				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
 			}
+
+			//this usleep was a fix to keep the order of the output closer to what I
+			//wanted but when it was gone over in class you said not to use delays for
+			//synchronization - there is a slight issue in the order that things are
+			//being printed - the output from the server process takes long enough
+			//to process that it is coming after the printf below. The program still
+			//works as expected, even though the prompt has some text from the server
+			//process after it.
+
+			//usleep(20);//this keeps outputting before the server gets a chance to process the message
 			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
 		}
 	}
