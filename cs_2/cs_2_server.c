@@ -6,7 +6,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdbool.h> //didn't realize bools required a header
+//#include <stdbool.h> //didn't realize bools required a header
+#include <time.h>
 
 #include "msg.h" //definitions of message types
 
@@ -61,9 +62,14 @@ int main()
 		sprintf(client_send_str,"%d_send",client_PID);
 		sprintf(client_recv_str,"%d_recv",client_PID);
 
+		current_client_count++; //parent and child will need this information
+		//As mentioned in the instructions, this will only be correct for the
+		//moment at which the child process is created - it will not be updated.
 
 		//fork
 		if(!fork()){ //here we enter the child function
+
+			printf("Client process has connected, with PID %d\n",client_PID);
 
 			while(1){
 
@@ -71,28 +77,45 @@ int main()
 				read(client_send_pipe,(char*)&msg,sizeof(msg_t));					//read
 				close(client_send_pipe);																	//close
 
-				printf("I HAVE RECIEVED THE CLIENT'S MESSAGE\n");
-
-				// client_recv_pipe =
-
 				if(msg.type == STATUS){
 				//response will include the number of children
 
-						printf("Client process %d wants to know how many children I have.\n",client_PID);
+						printf("Client process %d wants to know how many children have been created.\n",client_PID);
 
-						printf("and so it shall\n");
+						msg.type = RESPONSE;
+						sprintf(msg.message_text,"I have %d children.",current_client_count);
+
+						client_recv_pipe = open(client_recv_str,O_WRONLY);
+						write(client_recv_pipe,(char*)&msg,sizeof(msg_t));
+						close(client_recv_pipe);
 
 				}else if(msg.type == TIME){
 				//response will tell the time to the client
 
 						printf("Client process %d wants to know the time.\n",client_PID);
 
-						printf("and so it shall\n");
+						//from: http://www.cplusplus.com/reference/ctime/localtime/
+						time_t rawtime;
+						struct tm * timeinfo;
+
+						time (&rawtime);
+						timeinfo = localtime(&rawtime);
+
+						msg.type = RESPONSE;
+						sprintf(msg.message_text, "The time is %s", asctime(timeinfo));
+						sprintf(msg.message_text, strtok(msg.message_text, "\n"));
+						//for some reason this was adding a trailing newline I don't want included
+
+						client_recv_pipe = open(client_recv_str,O_WRONLY);
+						write(client_recv_pipe,(char*)&msg,sizeof(msg_t));
+						close(client_recv_pipe);
 
 				}else if(msg.type == STRING){
 				//does not require a response
 
 						printf("Client process %d wants me to echo a string.\n", client_PID);
+						printf("Here it is \"%s\"\n",strtok(msg.message_text, "\n"));
+						//getting weird newlines here, too
 
 				}else if(msg.type == COMMAND){
 				//does not require a response
@@ -106,16 +129,11 @@ int main()
 				}
 			}
 
-			printf("Child process handling client number %d has finished", client_PID);
+			printf("Child process handling client number %d has finished\n\n", client_PID);
 
 			return 0; //once you have exited infinite while loop, exit this child process
 
-		}else{
-
-			//parent code
-			current_client_count++; //increment - parent needs to retain this information
-
-		}
+		}//parent does not execute any code, no 'else' branch required
 	}
 
 	unlink(np); //get rid of the fifo

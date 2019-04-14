@@ -6,7 +6,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdbool.h>
+//#include <stdbool.h>
+#include <time.h>
 
 #include "msg.h" //definitions of message types
 
@@ -82,9 +83,9 @@ int main()
 		printf("\n>");
 
 		fgets(chlid_message_string,MSG_LENGTH,stdin);//get the input
-		printf("I HAVE THE STRING\n");
 		sprintf(buf,"%.4s",chlid_message_string);//grab the first four characters
 
+		printf("\n\n");
 
 		//----------------------------OPTIONS--------------------------------
 
@@ -117,7 +118,7 @@ int main()
 			read(client_recv_pipe,(char*)&msg,sizeof(msg_t));		//read (blocking)
 			close(client_send_pipe);														//close
 
-			printf("Server says \"%s\"\n",msg.message_text);			//report the number of children
+			printf("Server says: \"%s\"\n\n",msg.message_text);			//report the number of children
 
 		}
 
@@ -137,7 +138,7 @@ int main()
 			read(client_recv_pipe,(char*)&msg,sizeof(msg_t));		//read (blocking)
 			close(client_send_pipe);														//close
 
-			printf("Server says the time is %s\n", msg.message_text);	//report the time
+			printf("Server says: \"%s\"\n\n", msg.message_text); //report the time
 
 		}
 
