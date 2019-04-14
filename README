@@ -1,0 +1,7 @@
+Part 1 is in cs_1, part 2 in cs_2.
+
+I am having some issue with the code on p2, when I tested it there, my code 
+will go into an infinite loop when I try to exit. On my machine, I have no
+issue, I can send an exit command from the client process and it will
+exit the forked process, and wait for another client to connect - but on P2
+it goes into an infinite loop and won't allow another client to connect.

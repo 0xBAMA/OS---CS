@@ -73,24 +73,30 @@ int main(){
 
 		while(1)
 		{
+
 			fgets(chlid_message_string,MSG_LENGTH,stdin);//get the input
 			sprintf(buf,"%.4s",chlid_message_string);//grab the first four characters
 
 			if(!strcmp(buf,exit_string))
 			{
 				sprintf(msg.message_text, "%s", chlid_message_string);
-				msg.type = COMMAND;
+				msg.type = COMMAND;//prepare a message telling it to exit
+
+				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
 
 				break;//exit the infinite while loop, if the user input started with "exit"
 			}
 
 			if(!strcmp(buf,send_string))
 			{//we know the string starts with send - construct the message and send it
-				sprintf(msg.message_text, "%s", chlid_message_string+6); //drop "send: "
-				msg.type = REGULAR;
+				sprintf(msg.message_text, "%s", chlid_message_string+5); //drop "send:"
+				msg.type = REGULAR;//prepare a message telling it to output a string
 
 				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
 			}
+
+			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
+
 		}
 	}
 //******************************************************************************
