@@ -61,25 +61,24 @@ int main(){
 	}else{						//child process - closes read end then send messages
 		close(cs_pipe[0]); //close read end of the pipe
 
-		char chlid_message_string[MSG_LENGTH]; //holds the user input
+		char child_message_string[MSG_LENGTH]; //holds the user input
 		char buf[6];
 		char exit_string[5] = "exit";
 		char send_string[5] = "send";
 
 		msg_t msg;
 
-
+		printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
 
 		while(1)
 		{
-			usleep(1);//weird timing issues - prompt was outputting before the server had outputted
-			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
-			fgets(chlid_message_string,MSG_LENGTH,stdin);//get the input
-			sprintf(buf,"%.4s",chlid_message_string);//grab the first four characters
+
+			fgets(child_message_string,MSG_LENGTH,stdin);//get the input
+			sprintf(buf,"%.4s",child_message_string);//grab the first four characters
 
 			if(!strcmp(buf,exit_string))
 			{
-				sprintf(msg.message_text, "%s", chlid_message_string);
+				sprintf(msg.message_text, "%s", child_message_string);
 				msg.type = COMMAND;//prepare a message telling it to exit
 
 				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
@@ -89,11 +88,14 @@ int main(){
 
 			if(!strcmp(buf,send_string))
 			{//we know the string starts with send - construct the message and send it
-				sprintf(msg.message_text, "%s", chlid_message_string+5); //drop "send:"
+				sprintf(msg.message_text, "%s", child_message_string+5); //drop "send:"
 				msg.type = REGULAR;//prepare a message telling it to output a string
 
 				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
 			}
+
+			usleep(20);//this keeps outputting before the server gets a chance to process the message
+			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
 		}
 	}
 //******************************************************************************
