@@ -5,4 +5,10 @@ I am having some issue with the code for part 2 on p2, when I tested it
 there, my code will go into an infinite loop when I try to exit. On my machine,
 I have no issue, I can send an exit command from the client process and it will
 exit the forked process, and wait for another client to connect - but on P2 it
-goes into an infinite loop and won't allow another client to connect.
+goes into an infinite loop and won't allow another client to connect. It actually
+says something about 'fork is not available at this time' when you try to run
+another client.
+
+It is a guess, but I think it has something to do with the behavior of the
+"break" statement that exits the infinite loop - is the behavior different on P2?
+On my machine it works with no issue.

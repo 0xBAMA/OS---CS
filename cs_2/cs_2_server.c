@@ -121,11 +121,11 @@ int main()
 				//does not require a response
 
 						printf("Client process %d is done.\n", client_PID);
-						break;//exit loop
+						break;//exit the infinite loop - "break" doesn't seem to exit the loop properly on P2
 
 				}else{
 						printf("Server recieved message of unknown type - exiting\n");
-						break;
+						break; //exit the infinite loop - "break" doesn't seem to exit the loop properly on P2
 				}
 			}
 
