@@ -5,17 +5,24 @@
 
 //expresses the type of the incoming message
 typedef enum {
-	INITIAL,
-	REGULAR,
-	COMMAND
+	RESPONSE, //the type that gets sent back to the client
+	STATUS,	//tells the server to report how many children it has
+	TIME,		//tells the server to report the current time of day
+	STRING,	//tells the server to expect a plain message
+	COMMAND		//tells the server to exit
 } msg_type_t;
 
+typedef struct initial_msg{
 
-//structure for the message
+	int PID; //all that is needed initially is the PID value of the client
+
+}	initial_msg_t;
+
+
+//structure for the subsequent messages
 typedef struct msg {
 
 	msg_type_t type;
-	int PID;
 	char message_text[MSG_LENGTH];
 
 } msg_t; //<--allows declaration with 'msg_t' rather than 'struct msg'
