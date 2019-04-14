@@ -93,8 +93,6 @@ int main(){
 
 				write(cs_pipe[1],(char*)&msg,sizeof(msg_t));
 			}
-
-			usleep(20);//this keeps outputting before the server gets a chance to process the message
 			printf("This is the child - enter \'send:\' followed by a message to have the server print, or enter \'exit\' to exit.\n");
 		}
 	}
